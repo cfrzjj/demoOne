@@ -1,5 +1,7 @@
 package com.example.demo.common;
 
+import com.baomidou.mybatisplus.core.incrementer.IKeyGenerator;
+import com.baomidou.mybatisplus.extension.incrementer.H2KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
@@ -51,5 +53,10 @@ public class BeanConfig {
         // 等待所有任务结束后再关闭线程池
 //        executor.setWaitForTasksToCompleteOnShutdown(true);
         return executor;
+    }
+
+    @Bean
+    public IKeyGenerator keyGenerator() {
+        return new H2KeyGenerator();
     }
 }
