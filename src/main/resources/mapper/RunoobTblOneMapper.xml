@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.mapper.RunoobTblOneMapper">
+<!--    <select id="selectA" resultType="com.example.demo.entity.RunoobTblOne">-->
+<!--        select  * from runoob_tbl_one-->
+<!--    </select>-->
+    <select id="getOneByRunoobId" resultType="com.example.demo.entity.RunoobTblOne">
+        select * from runoob_tbl_one where runoob_id = #{runoob_id}
+    </select>
 
+    <select id="checkTableExistsWithSchema"
+            resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM information_schema.tables WHERE
+            table_schema=#{tableSchema} AND table_name = #{tableName}
+    </select>
+
+    <select id="checkTableExistsWithShow"
+            resultType="java.util.Map">
+        show tables like #{tableName}
+    </select>
+
+    <update id="createNewTableAndInsertData">
+        create table ${tableName}
+        (id int not null default 0 primary key,
+        name char(20) default '1');
+    </update>
 </mapper>
