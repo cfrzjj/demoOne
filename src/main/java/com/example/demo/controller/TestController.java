@@ -1,17 +1,29 @@
 package com.example.demo.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.example.demo.entity.RunoobTblEntity;
+import com.example.demo.entity.RunoobTblOne;
 import com.example.demo.mapper.RunoobTblMapper;
 import com.example.demo.service.RunoobTblService;
 import com.example.demo.test.Hello;
+import com.mysql.cj.protocol.x.Notice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
 
@@ -88,6 +100,32 @@ public class TestController {
     @PostMapping("/delete")
     public String delete(@RequestBody RunoobTblEntity runoob){
         RunoobTblService.removeById(runoob);
+        return "====";
+    }
+
+    @GetMapping("/testGet")
+    public String testGet(){
+        RestTemplate restTemplate = new RestTemplate();
+        //get请求
+        String url = "http://localhost:9091/runoobTblOne/test";
+        ResponseEntity<String> forEntity = restTemplate.getForEntity(url, String.class);
+
+        return "====";
+    }
+
+    @GetMapping("/testPost")
+    public String testPost(){
+        RestTemplate restTemplate = new RestTemplate();
+//        restTemplate.getMessageConverters().add(0,new StringHttpMessageConverter(Charset.forName("UTF-8")));
+        //get请求
+        String url = "http://localhost:9091/runoobTblOne/testPost";
+        HttpHeaders headers = new HttpHeaders();
+        MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
+        headers.setContentType(type);
+        List<RunoobTblEntity> list = RunoobTblService.list();
+        String str = JSONObject.toJSONString(list);
+        HttpEntity httpEntity = new HttpEntity(str, headers);
+        ResponseEntity<JSONObject> stringResponseEntity = restTemplate.postForEntity(url, httpEntity, JSONObject.class);
         return "====";
     }
 
